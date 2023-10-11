@@ -7,6 +7,12 @@
     </section>
     <section class='boards__buttons'>
         <ul>
+            <li>
+                <label for='btn-recovery-previous'><i class='glyphicon glyphicon-chevron-left'></i></label>
+                <button hidden id='btn-recovery-previous'></button>
+                <label for='btn-recovery-next'><i class='glyphicon glyphicon-chevron-right'></i></label>
+                <button hidden id='btn-recovery-next'></button>
+            </li>
             <li><button id='btn-low-size'>a</button><button id='btn-up-size'>A</button></li>
             <li><i class='glyphicon glyphicon-copy' id='buttons__btn-copy-code'>Copy</i></li>
             <li>
@@ -25,6 +31,7 @@
             <!-- It gonna be used for lines of code -->
         </div>&nbsp;
         <section class='board board-left'>
+            <div class='board-left__dropownlist-autocompletecode' id='board-left__dropownlist-autocompletecode'></div>
             <div id='board__lines-mobile' cols='2' class='board__lines-mobile'>
                 <span class='line'>1</span> 
                 <!-- It gonna be used for lines of code -->
@@ -38,20 +45,5 @@
             </article>
         </section>
     </div>
-    <!-- it will be shown when display as mobile -->
-    <!-- <div class='layout__boards-mobile'>
-        <section class='board-movile board-left'>
-            <div id='board__lines-mobile' cols='2' class='board__lines'>
-                1
-            </div>&nbsp;
-            <textarea name='board__code' contenteditable='true' class='board__code' id='board__code-mobile'>
-            <?php echo htmlentities("<?php"); ?>
-            </textarea>
-        </section>
-        <section class='board-movile board-right'>
-            <article name='board__output' class='board__output' id='board__output-mobile'>   
-            </article>
-        </section>
-    </div> -->
 </div>
 <?php require_once 'src/views/footer.php'; ?>

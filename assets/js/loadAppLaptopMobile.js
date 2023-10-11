@@ -1,14 +1,20 @@
 import { startCompilation } from "./compilateCode.js";
 export const loadAppLaptopMobile = ( isMobile )=>{
 
-    console.log( );
-
     const changeColor = ( type )=>{
 
         return {
             'color': type == 0 ? '#98b978' : '#7fff00'
         }
     
+    }
+
+    const deleteMultipleLines = ( board_code , squaresToRemove ) =>{
+
+        board_code.value = board_code.value.slice( 0 , squaresToRemove[0][0] ) + board_code.value.slice( squaresToRemove[0][1] );
+
+        console.log( board_code.value );
+
     }
     
     const resetTextarea = ( board_code )=>{
@@ -23,6 +29,9 @@ export const loadAppLaptopMobile = ( isMobile )=>{
             `);
     
         }
+
+        board_code.value.replace( /\s+/g , '' );
+        board_code.value = board_code.value.slice(0,6);
     
     }
     
@@ -47,6 +56,86 @@ export const loadAppLaptopMobile = ( isMobile )=>{
         
         }
     
+    }   
+
+    // It´s gonna be used to find available variables associated which You have written
+    const searchAvailableVariables = ( e )=>{
+        
+        const pattern = /\$[a-zA-Z_]\w*\s/g;
+        const matches = board_code.value.match(pattern);
+        if ( matches ){
+
+            const matches_unique = new Set( matches );
+
+            const matches_unique_array = Array.from( matches_unique );
+
+            console.log( matches_unique_array );
+
+            let optionsList = ``;
+
+            matches_unique_array.forEach( options => {
+                optionsList+=`<option value='${options}'>${options}</option>`;
+            });
+
+            return optionsList;
+
+        }
+
+    }
+
+    const autocomplete = ( e )=>{
+
+        let start = e.target.selectionStart , end = e.target.selectionEnd;
+
+        let lastCharacter = e.target.value[ end - 1 ];
+
+        let isAutocompleting = false;
+
+        let letter = '';
+
+        if ( e.keyCode == 8 || e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40 ){
+
+            return true;
+
+        } else {
+
+            if ( lastCharacter === '(' ){
+
+                letter = ')';
+                isAutocompleting = true;
+
+            }
+
+            if ( lastCharacter === '{' ){
+
+                letter = '}';
+                isAutocompleting = true;
+                
+            }
+
+            if ( lastCharacter === '$' ){
+                // Make a list of available variables to autocomplete
+                console.log( 'Listing available variables' );
+
+                isAutocompleting = false
+
+            }
+
+        }
+
+        if ( isAutocompleting ){
+
+            board_code.value = board_code.value.substring(0, start) + letter + board_code.value.substring( end );
+
+            let currentCursorPosition = start - 1;
+
+            board_code.setSelectionRange( currentCursorPosition + 2   , currentCursorPosition + 2 );
+
+            e.target.selectionStart = currentCursorPosition + 2;
+            e.target.selectionEnd = currentCursorPosition + 2;
+
+        }
+
     }
     
     const calculateLines = ( lines , board_lines )=>{
@@ -59,9 +148,9 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     
         $(board_lines).html(totalLines);
         
-        if ( !isTyping ){
+        if ( isTyping ){
     
-           $(board_lines).scrollTop( $(board_lines)[0].scrollHeight );
+           $(board_lines).scrollTop( $(board_lines)[0].scrollHeight + 20 );
         
         }
     
@@ -89,44 +178,104 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     
     let currentSizeFont = 0; // current font size letter
     
-    let isTyping = false;
+    let isTyping = false
+
+    let squaresToRemove = [];
+
+    let isMousingUp = false;
     
     resetTextarea( board_code );
     
     $(board_code).on('keydown',(event)=>{
-    
+
+        let start = event.target.selectionStart;
+        let end = event.target.selectionEnd;
+        
+        
         if ( event.keyCode === 9 ){
     
             event.preventDefault();
-            // event.target.value+='  ';
-            const target = event.target;
-            const start = target.selectionStart;
-
-            console.log( start );
-
-            const end = target.selectionEnd; // add what there is ahead to space
-            const value = target.value;
 
             // Insert two spaces at the cursor position
-            target.value = value.substring(0, start) + '  ' + value.substring( end );
+            board_code.value = board_code.value.substring(0, start) + '  ' + board_code.value.substring( end );
             
             // Set the cursor position after the inserted spaces
-            target.selectionStart = target.selectionEnd = start + 2;
+            event.target.selectionStart = event.target.selectionEnd = start + 2;
     
+        }    
+
+        if ( event.keyCode === 8 ){
+
+            event.preventDefault();
+
+            if ( board_code.value.length > 1) {
+                // Remove the last character from the string
+                let newText = board_code.value.slice( 0, start - 1 ) + board_code.value.slice( start , board_code.value.length  );
+
+                let currentCursorPosition = start - 1;
+
+                board_code.value = newText;
+
+                if ( squaresToRemove.length != 0 ){
+
+                    deleteMultipleLines( board_code , squaresToRemove );
+
+                    squaresToRemove = [];
+
+                    isMousingUp = false;
+
+                }
+
+                board_code.setSelectionRange( currentCursorPosition , currentCursorPosition );
+
+                event.target.selectionStart = currentCursorPosition;
+                event.target.selectionEnd = currentCursorPosition;
+
+            }
+
         }
-        
+
+        // Detect both left , up , down and right arrow
+        if ( event.keyCode === 37 || event.keyCode === 38 || event.keyCode === 39 || event.keyCode === 40 ){
+
+            squaresToRemove[0] = [ start , end ]; 
+
+            console.log( $(board_lines).scrollTop() );
+
+        }
+
+        console.log( squaresToRemove );
+
         isTyping = true; 
+
+        calculateLines( event.target.value.split('\n') , board_lines );
     
     })
+
+    $(board_code).on('mouseup',(event)=>{
+
+        let start = event.target.selectionStart;
+
+        let end = event.target.selectionEnd;
+
+        squaresToRemove[0] = [ start , end ];
+
+        console.log( squaresToRemove );
+
+        isMousingUp = true;
+
+    });
     
     $(board_code).on('keyup',(event)=>{
     
         event.preventDefault();
-    
+
         isTyping = true;
+
+        autocomplete( event );
     
         calculateLines( event.target.value.split('\n') , board_lines );
-    
+
     })
     
     // Button to compilate code

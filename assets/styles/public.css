@@ -226,6 +226,22 @@ select {
 
 }
 
+/* Lets take thumbnails to droppwon list */
+.layout__boards .board-left .board-left__dropownlist-autocompletecode {
+
+    position: absolute;
+    top:100px;
+    z-index: 1;
+
+}
+
+.layout__boards .board__code {
+
+    position: relative; 
+    
+
+}
+
 .layout__boards .board__lines {
 
     font-size:13px;
@@ -386,12 +402,13 @@ select {
 
     .layout__boards {
 
-        width:500px;
+        width:600px;
         min-width: 500px;
         display: flex;
         flex-direction: column;
         position: relative;
         height:600px;
+       
     
     }
 
@@ -412,7 +429,7 @@ select {
 
         position: relative;
         width:700px;
-        min-width: 500px;
+        min-width: 700px;
         background-color: var(--main-color);
         border-radius: 0.4rem;
         margin-top:2rem;
@@ -422,8 +439,8 @@ select {
 
     .boards__buttons ul {
 
-        width:500px;
-        min-width: 300px;
+        width:700px;
+        min-width: 500px;
         display: flex;
         flex-direction: row;
         align-items:center;
@@ -440,11 +457,35 @@ select {
 
 }
 
+@media screen and ( max-width: 600px ){
+
+    .boards__buttons ul {
+
+        width:600px;
+        min-width: 500px;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items:center;
+        margin:auto;
+    
+    }
+
+    .layout__boards .board {
+
+        width:600px;
+        height: 400px;
+        margin: auto 40px;
+
+    }
+
+}
+
 @media screen and ( max-width: 500px ){
 
     .layout {
 
-        width:500px;
+        width:700px;
 
     }
 
@@ -462,8 +503,8 @@ select {
 
     .layout__boards {
 
-        width:500px;
-        min-width: 300px;
+        width:600px;
+        min-width: 400px;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -476,6 +517,7 @@ select {
 
         width:600px;
         height: 400px;
+        margin: auto 50px;
 
     }
 
@@ -491,7 +533,7 @@ select {
 
     .layout {
 
-        width:500px;
+        width:700px;
 
     }
 
@@ -503,8 +545,9 @@ select {
 
     .layout__boards .board {
 
-        width:600px;
+        width:700px;
         height: 425px;
+        margin:auto;
 
     }
 
