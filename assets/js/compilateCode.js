@@ -26,7 +26,7 @@ export const startCompilation = ( board_code , isMobile )=>{
 
     setTimeout(()=>{
 
-        compilateCode( newfile.replace( '../../localData/' , '' ) );
+        compilateCode( newfile.replace( '../../Data/' , '' ) );
 
         let endTime = new Date().getTime(); // Execution time end
 
@@ -110,6 +110,6 @@ export const getGeneratedFile = ()=>{
 
     nameFile+= 'file' + nameFile;
 
-    return decodeURIComponent('../../localData/' + nameFile + '.php');
+    return decodeURIComponent('../../Data/' + nameFile + '.php');
 
 }

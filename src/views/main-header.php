@@ -17,6 +17,6 @@
         <span id='url_request_parse_output_msg'><?php echo URI . '/src/public/parseOutputMessage.php'; ?></span>
         <span id='url_request_versions_php'><?php echo URI . '/src/public/getVersionsPHP.php'; ?></span>
         <span id='url_request_change_version'><?php echo URI . '/src/public/changeVersion.php'; ?></span>
-        <span id='url_request_output_code_compiled'><?php echo URI . '/localData/'; ?></span>
+        <span id='url_request_output_code_compiled'><?php echo URI . '/Data/'; ?></span>
         <span id='url_request_delete_file'><?php echo URI . '/src/public/deleteFile.php'; ?></span>
     </div>
