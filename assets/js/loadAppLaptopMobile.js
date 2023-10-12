@@ -16,6 +16,12 @@ export const loadAppLaptopMobile = ( isMobile )=>{
         console.log( board_code.value );
 
     }
+
+    const recoveryData = ()=>{
+
+
+
+    }
     
     const resetTextarea = ( board_code )=>{
     
@@ -183,6 +189,8 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     let squaresToRemove = [];
 
     let isMousingUp = false;
+
+    let isHoldingCtrlZ = false;
     
     resetTextarea( board_code );
     
@@ -241,6 +249,13 @@ export const loadAppLaptopMobile = ( isMobile )=>{
             squaresToRemove[0] = [ start , end ]; 
 
             console.log( $(board_lines).scrollTop() );
+
+        }
+
+        if ( event.keyCode == 90 && event.keyCode == 17 ){
+
+            recoveryData(); // Function used to recovery data
+            return false;
 
         }
 
