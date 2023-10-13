@@ -13,7 +13,7 @@ export const startCompilation = ( board_code , isMobile )=>{
 
     let startTime = new Date().getTime(); // Execution time startup
     
-    let newfile = getGeneratedFile();
+    let newfile = $('#url_php_File').text() + 'file_' + getRandomNameFile() + '.php';
 
     const data = new FormData();
 
@@ -26,13 +26,13 @@ export const startCompilation = ( board_code , isMobile )=>{
 
     setTimeout(()=>{
 
-        compilateCode( newfile.replace( '../../Data/' , '' ) );
+        compilateCode( newfile.replace( $('#url_php_File').text() , '' ) );
 
         let endTime = new Date().getTime(); // Execution time end
 
         let executionTime = ( endTime - startTime ) / 1000;
     
-        console.log( executionTime - 1 );
+        console.log( executionTime - 1 ); // Remove 1 seconds due to remaining time of setTimeOut
 
         // Only this function for mobile, when user exect code compilation,
         if ( isMobile ){
@@ -67,7 +67,7 @@ export const compilateCode= async( file )=>{
 
         console.log( output );
 
-        if ( output.includes( '<br />' ) ){
+        if ( output.includes( '<br />' ) ){ // The tipical error of php contains a curious br which is not so common like we see in html
 
             estrustureHandleRequest( output );
 
@@ -90,26 +90,26 @@ export const compilateCode= async( file )=>{
 
 }
 
-export const getGeneratedFile = ()=>{
+export const getRandomNameFile = ()=>{
 
     let code = 'abcdefghijyz12345678910';
 
     let chars = 12;
 
-    let nameFile = '';
+    let name = '';
 
     while ( chars > 0 ){
 
         let randomNumbers = getRandomInt( 0 , code.length - 1 );
 
-        nameFile+=code[ randomNumbers ];
+        name+=code[ randomNumbers ];
 
         chars--;
 
     }
 
-    nameFile+= 'file' + nameFile;
+    name+= 'file' + name;
 
-    return decodeURIComponent('../../Data/' + nameFile + '.php');
+    return decodeURIComponent(name);
 
 }

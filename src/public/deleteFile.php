@@ -2,6 +2,6 @@
 
 require_once '../../parameters.php';
 
-exec( "rm -f filename " . LOCAL_PATH . '/Data/' . $_POST['file'] );
+exec( "rm -f filename " . URL_PHP_FILE . $_POST['file'] );
 
 ?>

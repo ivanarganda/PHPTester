@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
 header('Access-Control-Allow-Headers: token, Content-Type');
@@ -46,5 +48,18 @@ $slashes = count( explode( '/' , $route ) ) - 1;
 $route = $slashes != 1  ? str_replace( $route , '' , URI ) :  URI; 
 
 define( 'URI_CONTENT_PAGE' , $route );
+
+$url_php_file = LOCAL_PATH . '/filesPHP/';
+$url_txt_file = LOCAL_PATH . '/filesTXT/';
+
+$php_file = str_replace( LOCAL_PATH . '/' , '' , $url_php_file );
+$txt_file = str_replace( LOCAL_PATH . '/' , '' , $url_txt_file );
+
+define( 'URL_PHP_FILE' , $url_php_file );
+define( 'URL_TXT_FILE' , $url_txt_file );
+
+define( 'PHP_FILE' , $php_file );
+define( 'TXT_FILE' , $txt_file );
+
 
 ?>

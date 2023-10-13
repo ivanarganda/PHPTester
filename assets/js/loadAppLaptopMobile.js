@@ -1,4 +1,5 @@
 import { startCompilation } from "./compilateCode.js";
+import { createIdUserSession } from "./sessions.js";
 export const loadAppLaptopMobile = ( isMobile )=>{
 
     const changeColor = ( type )=>{
@@ -19,7 +20,7 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
     const recoveryData = ()=>{
 
-
+         
 
     }
     
@@ -40,27 +41,43 @@ export const loadAppLaptopMobile = ( isMobile )=>{
         board_code.value = board_code.value.slice(0,6);
     
     }
+
+    const storeScrollPosition = () => {
+
+        scrollTop = board_code.scrollTop;
+
+    };
+
+    // Helper function to restore the scroll position
+    const restoreScrollPosition = () => {
+
+        board_code.scrollTop = scrollTop;
+
+    };
     
     const scrollBothLinesAndCode = ( activeContainer , pasiveContainer )=>{
     
-        // Active container is who gonna make a scroll as pasive container makes what active makes
-        /* For example: when I scroll down or up on board lines which is on side left of web page, he is the active as pasive is board code where I write the code*/
-    
-        let scrollPosition = $(activeContainer).scrollTop();
-    
-        let scrollThreshold = 10;
-    
-        if (scrollPosition > $(pasiveContainer).scrollTop() + scrollThreshold) {
-            // Scroll down action
-            console.log("Scrolling down");
-            $(pasiveContainer).scrollTop( $(pasiveContainer).scrollTop() + 35 );
+            // Active container is who gonna make a scroll as pasive container makes what active makes
+            /* For example: when I scroll down or up on board lines which is on side left of web page, he is the active as pasive is board code where I write the code*/
         
-        } else if (scrollPosition < $(pasiveContainer).scrollTop() - scrollThreshold) {
-            // Scroll up action
-            console.log("Scrolling up");
-            $(pasiveContainer).scrollTop( $(pasiveContainer).scrollTop() - 35 );
+            let scrollPosition = $(activeContainer).scrollTop();
         
-        }
+            let scrollThreshold = 10;
+    
+            if (scrollPosition > $(pasiveContainer).scrollTop() + scrollThreshold) {
+                // Scroll down action
+                console.log("Scrolling down");
+                $(pasiveContainer).scrollTop( $(pasiveContainer).scrollTop() + 35 );
+            
+            } else if (scrollPosition < $(pasiveContainer).scrollTop() - scrollThreshold) {
+                // Scroll up action
+                isScrollingUp = true;
+                console.log("Scrolling up");
+                $(pasiveContainer).scrollTop( $(pasiveContainer).scrollTop() - 35 );
+            
+            }
+
+            console.log( isScrollingUp );
     
     }   
 
@@ -187,14 +204,20 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     let isTyping = false
 
     let squaresToRemove = [];
-
+    let isScrollingUp = false;
     let isMousingUp = false;
-
     let isHoldingCtrlZ = false;
+
+    let currentIdSession = createIdUserSession();
+    let arrayModifiedData = [];
+
+    let scrollTop = 0;
     
     resetTextarea( board_code );
     
     $(board_code).on('keydown',(event)=>{
+
+        console.log( event.keyCode );
 
         let start = event.target.selectionStart;
         let end = event.target.selectionEnd;
@@ -252,9 +275,14 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
         }
 
-        if ( event.keyCode == 90 && event.keyCode == 17 ){
+        if ( event.keyCode === 90 && event.ctrlKey ){
 
-            recoveryData(); // Function used to recovery data
+            event.preventDefault();
+
+            recoveryData();
+
+            isHoldingCtrlZ = true;
+
             return false;
 
         }
@@ -284,6 +312,8 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     $(board_code).on('keyup',(event)=>{
     
         event.preventDefault();
+
+        isHoldingCtrlZ = false;
 
         isTyping = true;
 
@@ -343,14 +373,18 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     
     
     $(board_lines).on('scroll',()=>{
-    
-        scrollBothLinesAndCode( board_lines , board_code );
+
+        storeScrollPosition(); // Store the current scroll position
+        scrollBothLinesAndCode(board_lines, board_code);
+        restoreScrollPosition(); // Restore the scroll position
     
     })
     
     $(board_code).on('scroll',()=>{
     
-        scrollBothLinesAndCode( board_code , board_lines );
+        storeScrollPosition(); // Store the current scroll position
+        scrollBothLinesAndCode(board_code, board_lines);
+        restoreScrollPosition(); // Restore the scroll position
     
     })
 
