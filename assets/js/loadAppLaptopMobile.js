@@ -221,6 +221,21 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
         let start = event.target.selectionStart;
         let end = event.target.selectionEnd;
+
+        // Key F4 to compilate code
+        if ( event.keyCode === 115 ){
+
+            event.preventDefault();
+
+            $(btn_compilate).css(changeColor(0));
+    
+            startCompilation( board_code , isMobile );
+
+            $(btn_compilate).css(changeColor(1));
+
+            return false;
+
+        }
         
         
         if ( event.keyCode === 9 ){
