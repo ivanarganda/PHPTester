@@ -2,6 +2,25 @@ import { startCompilation } from "./compilateCode.js";
 import { createIdUserSession } from "./sessions.js";
 export const loadAppLaptopMobile = ( isMobile )=>{
 
+    const getCurrentDate = ()=>{
+
+        const date = new Date();
+        let day = date.getDay() , month = date.getMonth() , year = date.getFullYear(),
+              hour = date.getHours() , minutes = date.getMinutes() , seconds = date.getSeconds() , miliseconds = date.getMilliseconds();
+
+        day = day < 10 ? '0' + day : day;
+        month = month < 10 ? '0' + month : month;
+        hour = hour < 10 ? '0' + hour : hour;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        miliseconds = miliseconds < 10 ? '0' + miliseconds : miliseconds;
+        miliseconds = miliseconds < 100 ? miliseconds + '0' : miliseconds;
+
+
+        return `${day}-${month}-${year}-${hour}:${minutes}:${seconds}:${miliseconds}`;
+            
+    }
+
     const changeColor = ( type )=>{
 
         return {
@@ -20,7 +39,8 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
     const recoveryData = ()=>{
 
-         
+        // Get the last element of array modified data to recovery it
+         console.log( createIdUserSession() );
 
     }
     
@@ -335,6 +355,12 @@ export const loadAppLaptopMobile = ( isMobile )=>{
         autocomplete( event );
     
         calculateLines( event.target.value.split('\n') , board_lines );
+
+        if ( arrayModifiedData.length > 200 ){ arrayModifiedData = []; }
+
+        arrayModifiedData.push( `${createIdUserSession()}_${getCurrentDate()}.txt` );
+
+        console.log( arrayModifiedData );
 
     })
     

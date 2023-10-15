@@ -1,6 +1,7 @@
 import { getRandomInt } from "./random.js";
 import { estrustureHandleRequest } from "./estrustureHandleRequest.js"; // Manipulate response of request code compilation
 
+// Request functions
 const requestCompilateCode = async( file )=>{   
 
     const response = await fetch( $('#url_request_output_code_compiled').text() + file , { mode:'cors' } );
@@ -9,7 +10,25 @@ const requestCompilateCode = async( file )=>{
         
 }
 
+// Normal functions
+const createLoaderBoard = ()=>{
+
+    $('.board-right').addClass('spinner-wrapper');
+    $('.board-right article').removeClass('board_output').addClass('spinner');
+
+}
+
+const removeLoaderBoard = ()=>{
+
+    $('.board-right').removeClass('spinner-wrapper');
+    $('.board-right article').addClass('board_output').removeClass('spinner');
+
+}
+
+
 export const startCompilation = ( board_code , isMobile )=>{
+
+    createLoaderBoard();
 
     let startTime = new Date().getTime(); // Execution time startup
     
@@ -44,6 +63,8 @@ export const startCompilation = ( board_code , isMobile )=>{
             $(window).scrollTop( windowHeight );
 
         }
+
+        removeLoaderBoard();
 
     }, 1000);
 

@@ -41,7 +41,7 @@
             </textarea>
         </section>
         <section class='board board-right'>
-            <article name='board__output' class='board__output' id='board__output'>   
+            <article name='board__output' class='board_output' id='board__output'>   
             </article>
         </section>
     </div>

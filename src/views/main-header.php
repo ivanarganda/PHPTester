@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<?=URI; ?>assets/styles/main.css">
 </head>
 <body>
-
+    
     <!-- REQUESTES -->
     <div hidden>
         <span id='sessionId'><?=$_SESSION['id']?></span>
