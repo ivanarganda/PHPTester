@@ -37,10 +37,17 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
     }
 
-    const recoveryData = ()=>{
+    const recoveryData = ( arrayModifiedData )=>{
 
-        // Get the last element of array modified data to recovery it
-         console.log( createIdUserSession() );
+        // get the current file content
+        if ( currentPositionFileRecovery > 0 ){
+
+            currentPositionFileRecovery--;
+            
+        }
+
+
+        console.log( 'File: ' + arrayModifiedData[ currentPositionFileRecovery ] );
 
     }
     
@@ -228,8 +235,10 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     let isMousingUp = false;
     let isHoldingCtrlZ = false;
 
-    let currentIdSession = createIdUserSession();
     let arrayModifiedData = [];
+
+    let currentPositionFileRecovery  = 0;
+    
 
     let scrollTop = 0;
     
@@ -310,11 +319,19 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
         }
 
+        if ( event.ctrlKey ){
+
+            isHoldingCtrlZ = true;
+
+            return false;
+
+        }
+
         if ( event.keyCode === 90 && event.ctrlKey ){
 
             event.preventDefault();
 
-            recoveryData();
+            recoveryData( arrayModifiedData );
 
             isHoldingCtrlZ = true;
 
@@ -329,6 +346,8 @@ export const loadAppLaptopMobile = ( isMobile )=>{
         calculateLines( event.target.value.split('\n') , board_lines );
     
     })
+
+    
 
     $(board_code).on('mouseup',(event)=>{
 
@@ -345,12 +364,26 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     });
     
     $(board_code).on('keyup',(event)=>{
-    
-        event.preventDefault();
 
+        console.log( event.keyCode );
+    
         isHoldingCtrlZ = false;
 
         isTyping = true;
+
+        if ( event.ctrlKey ){
+
+            recoveryData( arrayModifiedData );
+
+            console.log( 'ctrl key up' );
+
+            return false;
+
+        }
+        
+        if ( event.keyCode === 17 ){ return false; }
+
+        if ( (event.ctrlKey && event.metaKey) && event.key === "z" ){ return false; }
 
         autocomplete( event );
     
@@ -360,7 +393,11 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
         arrayModifiedData.push( `${createIdUserSession()}_${getCurrentDate()}.txt` );
 
-        console.log( arrayModifiedData );
+        if ( currentPositionFileRecovery < arrayModifiedData.length ){
+
+            currentPositionFileRecovery = arrayModifiedData.length;
+
+        }
 
     })
     
