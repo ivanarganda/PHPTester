@@ -1,7 +1,29 @@
 import { startCompilation } from "./compilateCode.js";
-import { createIdUserSession } from "./sessions.js";
+import { createIdUserSession , checkSession } from "./sessions.js";
 export const loadAppLaptopMobile = ( isMobile )=>{
 
+    // RequestFunctions
+    const requestBufferData = async( file )=>{
+
+        if ( !file ){
+
+            const data = new FormData();
+
+            data.append( 'sessionId' , createIdUserSession() );
+
+            const response = await fetch( $('#url_request_buffer_files_data').text() , { mode:'cors' , method:'POST' , body:data } );
+
+            return response.json();
+
+        } else {
+
+            return fetch( $('#url_txt_File').text() + file , { mode:'cors' } ); 
+
+        }
+
+    }
+
+    // Normal functions
     const getCurrentDate = ()=>{
 
         const date = new Date();
@@ -37,17 +59,60 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
     }
 
-    const recoveryData = ( arrayModifiedData )=>{
+    // Store data while typing after recovering
+    const bufferData = async( file )=>{
 
-        // get the current file content
-        if ( currentPositionFileRecovery > 0 ){
+        let currentContentBoardCode = $(board_code).val();
 
-            currentPositionFileRecovery--;
+        const data = new FormData();
+
+        data.append( 'file' , file );
+        data.append( 'buffer_data' , currentContentBoardCode );
+
+        fetch( $('#url_request_buffer_data').text() , { mode:'cors' , method:'POST' , body:data } ).then( ( response ) => console.log( response ) );
+
+    }
+
+    const recoveryData = async( arrayModifiedData , arrow = false )=>{
+
+        if ( arrayModifiedData.length === 0 ){
+            // Give a chance if there are previous buffer files data saved to recovery them and storage in a array
+            requestBufferData('')
+            .then( data => {  
+
+                data.forEach( (element , index) => {
+                    if ( element.length != 0 ){
+                        arrayModifiedData.push( data[index][0] );
+                    }
+                });
+                console.log( data[3][0] );
+
+                if ( currentPositionFileRecovery < arrayModifiedData.length ){
+                    currentPositionFileRecovery = arrayModifiedData.length;
+                }
+
+            }).catch( error => console.log( error ) )
+
+        } else {
+
+            // get the current file content
+            if ( currentPositionFileRecovery > 0 ){ currentPositionFileRecovery--; }
+            if ( arrow === 'left' ){ currentPositionFileRecovery--; }
+            if ( arrow === 'right' ){ currentPositionFileRecovery++; }
+            if ( currentPositionFileRecovery > ( arrayModifiedData.length - 1 ) ){ currentPositionFileRecovery = arrayModifiedData.length - 1; }
+
+            // Get content of file
+            const bufferData = Promise.all([requestBufferData( arrayModifiedData[ currentPositionFileRecovery ] )]).then( data => {
+                return Promise.all( data.map( d => d.text()));
+            });
+            bufferData.then( data => {  
+                
+                if ( data[0].includes('<!DOCTYPE') ){ return false; }
+                $(board_code).val( data[0] ); 
             
+            }).catch( error => console.log( error ) )
+
         }
-
-
-        console.log( 'File: ' + arrayModifiedData[ currentPositionFileRecovery ] );
 
     }
     
@@ -108,28 +173,13 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     
     }   
 
-    // It´s gonna be used to find available variables associated which You have written
-    const searchAvailableVariables = ( e )=>{
-        
-        const pattern = /\$[a-zA-Z_]\w*\s/g;
-        const matches = board_code.value.match(pattern);
-        if ( matches ){
+    const compilateCode = ( isMobile )=>{
 
-            const matches_unique = new Set( matches );
+        $(btn_compilate).css(changeColor(0));
+    
+        startCompilation( board_code , isMobile );
 
-            const matches_unique_array = Array.from( matches_unique );
-
-            console.log( matches_unique_array );
-
-            let optionsList = ``;
-
-            matches_unique_array.forEach( options => {
-                optionsList+=`<option value='${options}'>${options}</option>`;
-            });
-
-            return optionsList;
-
-        }
+        $(btn_compilate).css(changeColor(1));
 
     }
 
@@ -225,6 +275,7 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     const btn_low_size = document.querySelector('#btn-low-size');
     const btn_up_size = document.querySelector('#btn-up-size');
     const btn_copy_code = document.querySelector('#buttons__btn-copy-code');
+    const btns__recovery = document.querySelector('#buttons__recovery');
     
     let currentSizeFont = 0; // current font size letter
     
@@ -239,6 +290,7 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
     let currentPositionFileRecovery  = 0;
     
+    console.log( createIdUserSession() );
 
     let scrollTop = 0;
     
@@ -246,26 +298,21 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     
     $(board_code).on('keydown',(event)=>{
 
-        console.log( event.keyCode );
-
         let start = event.target.selectionStart;
         let end = event.target.selectionEnd;
+
+        $(btns__recovery).show();
 
         // Key F4 to compilate code
         if ( event.keyCode === 115 ){
 
             event.preventDefault();
 
-            $(btn_compilate).css(changeColor(0));
-    
-            startCompilation( board_code , isMobile );
-
-            $(btn_compilate).css(changeColor(1));
+            compilateCode( isMobile );
 
             return false;
 
         }
-        
         
         if ( event.keyCode === 9 ){
     
@@ -315,8 +362,6 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
             squaresToRemove[0] = [ start , end ]; 
 
-            console.log( $(board_lines).scrollTop() );
-
         }
 
         if ( event.ctrlKey ){
@@ -338,8 +383,6 @@ export const loadAppLaptopMobile = ( isMobile )=>{
             return false;
 
         }
-
-        console.log( squaresToRemove );
 
         isTyping = true; 
 
@@ -365,8 +408,10 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     
     $(board_code).on('keyup',(event)=>{
 
-        console.log( event.keyCode );
-    
+        checkSession();
+
+        $(btns__recovery).show();
+
         isHoldingCtrlZ = false;
 
         isTyping = true;
@@ -391,7 +436,9 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
         if ( arrayModifiedData.length > 200 ){ arrayModifiedData = []; }
 
-        arrayModifiedData.push( `${createIdUserSession()}_${getCurrentDate()}.txt` );
+        let file = `${createIdUserSession()}_${getCurrentDate()}.txt`;
+
+        arrayModifiedData.push( file );
 
         if ( currentPositionFileRecovery < arrayModifiedData.length ){
 
@@ -399,16 +446,16 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
         }
 
+        bufferData( file );
+
+        console.log( arrayModifiedData );
+
     })
     
     // Button to compilate code
     $(btn_compilate).on('click',()=>{
     
-        $(btn_compilate).css(changeColor(0));
-    
-        startCompilation( board_code , isMobile );
-
-        $(btn_compilate).css(changeColor(1));
+        compilateCode( isMobile );
     
     })
     

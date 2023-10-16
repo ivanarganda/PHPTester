@@ -13,14 +13,16 @@
     
     <!-- REQUESTES -->
     <div hidden>
-        <span id='sessionId'><?=$_SESSION['id']?></span>
+        <span id='sessionId'><?=$_SESSION['id'] ?? ''?></span>
+        <span id='url_main_index'><?=URI?></span>
         <span id='url_request_create_file'><?=URI . 'src/public/createFile.php'?></span>
         <span id='url_request_parse_output_msg'><?=URI . 'src/public/parseOutputMessage.php'?></span>
         <span id='url_request_versions_php'><?=URI . 'src/public/getVersionsPHP.php'?></span>
         <span id='url_request_change_version'><?=URI . 'src/public/changeVersion.php'?></span>
         <span id='url_request_output_code_compiled'><?=URI . PHP_FILE?></span>
-        <span id='url_request_recovery_code_compiled'><?=URI . TXT_FILE?></span>
+        <span id='url_request_buffer_data'><?=URI . 'src/public/bufferData.php'?></span>
+        <span id='url_request_buffer_files_data'><?=URI . 'src/public/getBufferFilesData.php'?></span>
         <span id='url_request_delete_file'><?=URI . 'src/public/deleteFile.php'?></span>
         <span id='url_php_File'><?=URL_PHP_FILE?></span>
-        <span id='url_txt_File'><?=URL_TXT_FILE?></span>
+        <span id='url_txt_File'><?=URI . TXT_FILE?></span>
     </div>

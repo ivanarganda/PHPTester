@@ -1,5 +1,6 @@
 import { getRandomInt } from "./random.js";
 import { estrustureHandleRequest } from "./estrustureHandleRequest.js"; // Manipulate response of request code compilation
+import { createIdUserSession } from "./sessions.js";
 
 // Request functions
 const requestCompilateCode = async( file )=>{   
@@ -45,6 +46,18 @@ export const startCompilation = ( board_code , isMobile )=>{
 
     setTimeout(()=>{
 
+        const deleteBufferDataFiles = ()=>{
+
+            const data = new FormData();
+
+            data.append( 'file' , 'buffer' );
+            data.append( 'idSession' , createIdUserSession() );
+
+            fetch( $('#url_request_delete_file').text() , { mode:'cors' , method:'POST' , body:data } )
+            .then( response => { response.ok ? console.log('ok') : console.log( 'error' );})
+
+        }
+
         compilateCode( newfile.replace( $('#url_php_File').text() , '' ) );
 
         let endTime = new Date().getTime(); // Execution time end
@@ -65,6 +78,7 @@ export const startCompilation = ( board_code , isMobile )=>{
         }
 
         removeLoaderBoard();
+        deleteBufferDataFiles();
 
     }, 1000);
 

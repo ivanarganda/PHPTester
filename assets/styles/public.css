@@ -136,6 +136,11 @@ select {
     overflow: hidden;
 
 }
+.boards__buttons ul .buttons__recovery {
+
+    display:none;
+    
+}
 
 .boards__buttons ul li button {
 

@@ -2,6 +2,16 @@
 
 require_once '../../parameters.php';
 
-exec( "rm -f filename " . URL_PHP_FILE . $_POST['file'] );
+$file = $_POST['file'];
+$path = URL_PHP_FILE;
+
+if ( $file === 'buffer' ){
+
+    $file = $_POST['idSession'] . '_*.txt';
+    $path = URL_TXT_FILE;
+
+}
+
+exec( "rm -f filename " . $path . $file );
 
 ?>

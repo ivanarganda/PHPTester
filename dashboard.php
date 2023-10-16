@@ -7,11 +7,11 @@
     </section>
     <section class='boards__buttons'>
         <ul>
-            <li>
-                <label for='btn-recovery-previous'><i class='glyphicon glyphicon-chevron-left'></i></label>
-                <button hidden id='btn-recovery-previous'></button>
-                <label for='btn-recovery-next'><i class='glyphicon glyphicon-chevron-right'></i></label>
-                <button hidden id='btn-recovery-next'></button>
+            <li class='buttons__recovery' id='buttons__recovery'>
+                <label for='recovery__previous'><i class='glyphicon glyphicon-chevron-left'></i></label>
+                <button hidden id='recovery__previous'></button>
+                <label for='recovery__next'><i class='glyphicon glyphicon-chevron-right'></i></label>
+                <button hidden id='recovery__next'></button>
             </li>
             <li><button id='btn-low-size'>a</button><button id='btn-up-size'>A</button></li>
             <li><i class='glyphicon glyphicon-copy' id='buttons__btn-copy-code'>Copy</i></li>
