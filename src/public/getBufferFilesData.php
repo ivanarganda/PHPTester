@@ -1,11 +1,12 @@
 <?php 
 require_once '../../parameters.php';
+require_once LOCAL_PATH . '/src/classes/autoload.php';
 
-$files = scandir( LOCAL_PATH . '/filesTXT/' );
+$files = scandir( URL_TXT_FILE );
 
 echo json_encode( array_map( function($file){
     $matches = array();
-    preg_match_all("/$_POST[sessionId]+_+([0-9_-]){1,}+([0-9:-]){1,}+(\.\w+)/", $file, $matches);
+    preg_match_all( REGEX_BUFFER_FILES , $file, $matches);
     return $matches[0];
 } , $files ) );  
 

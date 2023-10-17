@@ -61,5 +61,9 @@ define( 'URL_TXT_FILE' , $url_txt_file );
 define( 'PHP_FILE' , $php_file );
 define( 'TXT_FILE' , $txt_file );
 
+$ipAddressSession = $_SERVER['REMOTE_ADDR'];
+
+define( 'REGEX_BUFFER_FILES' , "/$ipAddressSession+(\()+(\w+)+_+([0-9_-]){1,}+([0-9:-]){1,}+(\.\w+)/" );
+
 
 ?>

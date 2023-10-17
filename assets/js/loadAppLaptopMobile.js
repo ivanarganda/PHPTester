@@ -17,6 +17,8 @@ export const loadAppLaptopMobile = ( isMobile )=>{
 
         } else {
 
+            console.log( file );
+
             return fetch( $('#url_txt_File').text() + file , { mode:'cors' } ); 
 
         }
@@ -213,11 +215,18 @@ export const loadAppLaptopMobile = ( isMobile )=>{
                 
             }
 
-            if ( lastCharacter === '$' ){
-                // Make a list of available variables to autocomplete
-                console.log( 'Listing available variables' );
+            if ( lastCharacter === '[' ){
 
-                isAutocompleting = false
+                letter = ']';
+                isAutocompleting = true;
+
+            }
+
+            if ( lastCharacter === '\'' ){
+
+                letter = '\'';
+
+                isAutocompleting = true;
 
             }
 
@@ -295,14 +304,8 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     let scrollTop = 0;
     
     resetTextarea( board_code );
-    
-    $(board_code).on('keydown',(event)=>{
 
-        let start = event.target.selectionStart;
-        let end = event.target.selectionEnd;
-
-        $(btns__recovery).show();
-
+    $(document).on('keydown',(event)=>{
         // Key F4 to compilate code
         if ( event.keyCode === 115 ){
 
@@ -313,6 +316,14 @@ export const loadAppLaptopMobile = ( isMobile )=>{
             return false;
 
         }
+    })
+    
+    $(board_code).on('keydown',(event)=>{
+
+        let start = event.target.selectionStart;
+        let end = event.target.selectionEnd;
+
+        $(btns__recovery).show();
         
         if ( event.keyCode === 9 ){
     
@@ -456,6 +467,8 @@ export const loadAppLaptopMobile = ( isMobile )=>{
     $(btn_compilate).on('click',()=>{
     
         compilateCode( isMobile );
+
+        $(btns__recovery).hide();
     
     })
     

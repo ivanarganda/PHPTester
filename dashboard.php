@@ -13,10 +13,15 @@
                 <label for='recovery__next'><i class='glyphicon glyphicon-chevron-right'></i></label>
                 <button hidden id='recovery__next'></button>
             </li>
-            <li><button id='btn-low-size'>a</button><button id='btn-up-size'>A</button></li>
-            <li><i class='glyphicon glyphicon-copy' id='buttons__btn-copy-code'>Copy</i></li>
             <li>
+                <button class='buttons_font-size' id='btn-low-size'>a</button>
+                <button class='buttons_font-size' id='btn-up-size'>A</button>
+                <span class='tooltiptext'>Change size</span>
+            </li>
+            <li><i class='glyphicon glyphicon-copy' id='buttons__btn-copy-code'>Copy</i></li>
+            <li>      
                 <i class='glyphicon glyphicon-play' id='buttons__btn-compilate'></i>
+                <span class='tooltiptext'>Compilate or F4</span>
             </li>
             <li>
                 Version PHP

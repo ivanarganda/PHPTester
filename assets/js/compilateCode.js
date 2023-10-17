@@ -38,6 +38,7 @@ export const startCompilation = ( board_code , isMobile )=>{
     const data = new FormData();
 
     data.append( 'file' , newfile );
+    data.append( 'sessionId' , createIdUserSession() );
     data.append( 'code' , $(board_code).val() );
 
     fetch( $('#url_request_create_file').text() , { mode:'cors' , method:'POST' , body:data } )
@@ -54,7 +55,10 @@ export const startCompilation = ( board_code , isMobile )=>{
             data.append( 'idSession' , createIdUserSession() );
 
             fetch( $('#url_request_delete_file').text() , { mode:'cors' , method:'POST' , body:data } )
-            .then( response => { response.ok ? console.log('ok') : console.log( 'error' );})
+            .then( response => response.text() )
+            .then( (file)=>{
+                console.log( file );
+            })
 
         }
 

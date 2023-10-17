@@ -115,6 +115,10 @@ select {
     border-radius: 0.4rem;
     margin-top:2rem;
     margin-bottom:2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
 
 }
 
@@ -125,6 +129,7 @@ select {
     display: flex;
     flex-direction: row;
     align-items:center;
+    margin: auto;
 
 }
 
@@ -136,11 +141,7 @@ select {
     overflow: hidden;
 
 }
-.boards__buttons ul .buttons__recovery {
 
-    display:none;
-    
-}
 
 .boards__buttons ul li button {
 
@@ -183,6 +184,18 @@ select {
     padding:1rem;
     font-size: 1.5rem;
     cursor:pointer;
+
+}
+
+.boards__buttons ul .buttons__recovery {
+
+    display:none;
+    
+}
+
+.glyphicon-chevron-left , .glyphicon-chevron-right {
+
+    font-size:1rem !important;
 
 }
 
@@ -314,6 +327,32 @@ select {
 
     background: transparent;
     display:none;
+
+}
+
+/* ADDITIONAL FUNCTIONS */
+
+/* For tooltips on each element of html */
+.tooltiptext {
+
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    top:-2rem;
+    z-index: 1;
+
+}
+
+.glyphicon-play:hover~span , .buttons_font-size:hover~span {
+
+    visibility: visible;
 
 }
 
