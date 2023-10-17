@@ -23,6 +23,7 @@
         <span id='url_request_buffer_data'><?=URI . 'src/public/bufferData.php'?></span>
         <span id='url_request_buffer_files_data'><?=URI . 'src/public/getBufferFilesData.php'?></span>
         <span id='url_request_delete_file'><?=URI . 'src/public/deleteFile.php'?></span>
+        <span id='url_request_delete_buffer_files'><?=URI . 'src/public/deleteBufferFiles.php'?></span>
         <span id='url_php_File'><?=URL_PHP_FILE?></span>
         <span id='url_txt_File'><?=URI . TXT_FILE?></span>
     </div>

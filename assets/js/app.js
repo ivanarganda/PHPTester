@@ -1,5 +1,5 @@
 import { loadAppLaptopMobile } from "./loadAppLaptopMobile.js";
-
+import { deleteBufferFiles } from "./sessions.js";
 // Common functions which will be useful in both mobile and pc
 // Request functions
 const requestVersions = async()=>{
@@ -19,6 +19,14 @@ const requestChangeVersion = async( version )=>{
     const response = await fetch( $('#url_request_change_version').text() , { mode:'cors' , method:'POST' , body:data } );
 
     return response.ok ? response.json() : Promise.reject( response );
+
+}
+
+const requestCheckingBufferFiles = async()=>{
+
+    const response = await fetch( $('#url_request_buffer_files_data').text() , { mode:'cors' } );
+
+    return response.json();
 
 }
 
@@ -43,6 +51,51 @@ const loadVersions = ()=>{
     .catch( ( error )=>{
         console.log( error );
     })
+}
+
+// Once user starts app , it will order him , in case he has remaning files session data saved, to delete them
+const checkBufferFiles = ()=>{
+
+    const files_buffer = requestCheckingBufferFiles();
+
+    files_buffer.then( ( data ) => { 
+
+        let array_files = data.filter( (x) => { return x != '' });
+
+        if ( array_files.length !== 0  ){
+
+            let files = ``;
+            array_files.forEach(item => {
+                files += `<li>${item[0]}</li><br>`;
+            });
+
+            $('.layout').append(`<div id="myModal" class="modal">
+
+                <div class="modal-content">
+                    <span class="modal-content__close">&times;</span>
+                    <ul class="modal-content__list">
+                        ${files}
+                    </ul>
+                    <ul class="modal-content__buttons">
+                        <button id='deleteBufferFiles'>Delete temp files</button>
+                    </ul>
+                </div>
+            
+            </div>`);
+
+            $('#deleteBufferFiles').on('click',()=>{
+                deleteBufferFiles();
+                $('#myModal').html('').hide();
+            })
+
+            $('.modal-content__close').on('click',()=>{
+                $('#myModal').html('').hide();
+            })
+
+        }
+
+    })
+
 }
 
 const checkDeviceUsing = ()=>{
@@ -101,3 +154,4 @@ $('#buttons_droppown-list-versionsPHP').on('change',(event)=>{
 
 checkDeviceUsing();
 loadVersions();
+checkBufferFiles();
