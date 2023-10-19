@@ -15,6 +15,8 @@
   
   /* Modal Content */
   .modal-content {
+
+    position: relative;
     background-color: #fefefe;
     padding: 20px;
     border: 1px solid #888;
@@ -33,27 +35,40 @@
     height:30rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    flex-flow: 1;
+    flex-wrap: nowrap;
+    justify-content: left;
+    align-items: flex-start;
+    
 
   }
 
   .modal-content .modal-content__list li {
 
     font-size:1.2rem;
+    list-style: none;
+    border-bottom: 0.1rem solid grey;
+    padding:1rem;
+    display: block;
 
   }
   
   /* The Close Button */
-  .modal-content__close {
+  .modal__close {
+
     color: #aaaaaa;
-    float: left;
     font-size: 28px;
     font-weight: bold;
-    margin-bottom:4rem;
+    /* Position */
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    z-index: 2;
+
   }
   
-  .modal-content__close:hover,
-  .modal-content__close:focus {
+  .modal__close:hover,
+  .modal__close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;

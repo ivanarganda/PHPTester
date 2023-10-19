@@ -1,5 +1,6 @@
 import { loadAppLaptopMobile } from "./loadAppLaptopMobile.js";
-import { deleteBufferFiles } from "./sessions.js";
+import { createIdUserSession, deleteBufferFiles } from "./sessions.js";
+import { regexes } from "./regexes.js";
 // Common functions which will be useful in both mobile and pc
 // Request functions
 const requestVersions = async()=>{
@@ -29,6 +30,21 @@ const requestCheckingBufferFiles = async()=>{
     return response.json();
 
 }
+
+const requestCheckingReminder = async()=>{
+    const response = await fetch( $('#url_request_check_reminder').text() , { mode:'cors' } );
+    return await response.json();
+}
+
+const getReminder = async()=>{
+
+    return new Promise((resolve)=>{
+
+        resolve(requestCheckingReminder());
+
+    }) 
+
+};
 
 // normal functions
 const changeVersion = ( version )=>{
@@ -70,26 +86,64 @@ const checkBufferFiles = ()=>{
             });
 
             $('.layout').append(`<div id="myModal" class="modal">
-
+                
                 <div class="modal-content">
-                    <span class="modal-content__close">&times;</span>
+                    <span class="modal__close">X</span>
+                    <div>
+                        <h3>You got pending previous session files temp</h3>
+                    </div>
                     <ul class="modal-content__list">
-                        ${files}
+                        ${files.replace(regexes['REGEX_IP_REPLACE'],'')}
                     </ul>
                     <ul class="modal-content__buttons">
-                        <button id='deleteBufferFiles'>Delete temp files</button>
+                        <button id='deleteBufferFiles'>Delete previous session</button>
+                        <button id='doNotRemind'>Do not show again</button>
                     </ul>
                 </div>
             
             </div>`);
 
+            const responseReminder = getReminder();
+
+            responseReminder.then((res)=>{ 
+
+                console.log( res );
+                
+                if ( res === 'existReminder' ){
+
+                    $('#myModal').html('').hide();
+
+                }
+            
+            });
+
             $('#deleteBufferFiles').on('click',()=>{
+
                 deleteBufferFiles();
                 $('#myModal').html('').hide();
+
             })
 
-            $('.modal-content__close').on('click',()=>{
+            $('.modal__close').on('click',()=>{
+
                 $('#myModal').html('').hide();
+
+            })
+
+            // Create a temp file reminder to as user refresh browser again, wether this one exists, it wont show modal again
+            $('#doNotRemind').on('click',()=>{
+
+                let reminder = createIdUserSession() + '_reminder_.txt';
+                console.log( reminder );
+
+                const data = new FormData;
+
+                data.append( 'filename' , reminder );
+
+                fetch( $('#url_request_create_no_reminder').text() , { mode:'cors' , method:'POST' , body:data  } )
+                .then( response => response.text()  )
+                .then( ( file )=>{ console.log(file); $('#myModal').html('').hide(); } )
+ 
             })
 
         }

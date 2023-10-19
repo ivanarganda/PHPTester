@@ -1,3 +1,4 @@
+import { regexes } from "./regexes.js";
 export const checkSession = ()=>{
 
    let sessionId = $('#sessionId').text();

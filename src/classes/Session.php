@@ -30,6 +30,15 @@ class Session{
 
     }
 
+    // Function which matches wheter there is a file of not remind the got pending files temp session
+    public function checkNoReminderSessionFile(){
+
+        preg_match_all( REGEX_REMINDER_FILE , implode( ',' , scandir( URL_TXT_FILE ) ) , $matches);
+
+        return count($matches[0]) == 0 ? true : false; // In case not exists, means remind else not remind
+
+    }
+
 }
 
 

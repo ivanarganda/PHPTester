@@ -1,7 +1,9 @@
+import { regexes } from "./regexes.js";
+
 const getLine = ( delimiter , output ) =>{
 
     // return output.split( delimiter )[1].trim().replace( /(\/\w+)+(.[a-zA-Z0-9]+)(on line)/g , '' ).replace('<br />','');
-    return output.split( delimiter )[1].trim().replace( /(\/\w+)+(.[a-zA-Z0-9]+)/g , '').replace('<br />','');
+    return output.split( delimiter )[1].trim().replace( regexes['REGEX_URL_REPLACE'] , '').replace('<br />','');
 
 }
 

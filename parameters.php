@@ -24,10 +24,10 @@ define( 'PROTOCOL_WEB_XML' , 'http://' . $host );
 define( 'PROTOCOL_WEB' , $protocolWeb . $host );
 
 
-$isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+$isHttps = $_SERVER['HTTPS'] !== 'off';
 
 // Get the protocol (http or https)
-$protocol = $isHttps ? 'https://' : 'http://';
+$protocol = $_SERVER['REQUEST_SCHEME'] . '://';
 
 // Get the host name
 $host = $_SERVER['HTTP_HOST'];
@@ -63,7 +63,7 @@ define( 'TXT_FILE' , $txt_file );
 
 $ipAddressSession = $_SERVER['REMOTE_ADDR'];
 
-define( 'REGEX_BUFFER_FILES' , "/$ipAddressSession+(\()+(\w+)+_+([0-9_-]){1,}+([0-9:-]){1,}+(\.\w+)/" );
-
+define( 'REGEX_BUFFER_FILES' , "/$ipAddressSession+(\()+([a-zA-Z0-9])+_+([0-9_-]){1,}+([0-9:-]){1,}+(\.\w+)/" );
+define( 'REGEX_REMINDER_FILE' , "/$ipAddressSession+(\()+([a-zA-Z0-9])+_reminder_+(\.\w+)/" );
 
 ?>
