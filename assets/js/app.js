@@ -1,6 +1,6 @@
 import { loadAppLaptopMobile } from "./loadAppLaptopMobile.js";
+import { createModal } from "./modal.js";
 import { createIdUserSession, deleteBufferFiles } from "./sessions.js";
-import { regexes } from "./regexes.js";
 // Common functions which will be useful in both mobile and pc
 // Request functions
 const requestVersions = async()=>{
@@ -80,28 +80,7 @@ const checkBufferFiles = ()=>{
 
         if ( array_files.length !== 0  ){
 
-            let files = ``;
-            array_files.forEach(item => {
-                files += `<li>${item[0]}</li><br>`;
-            });
-
-            $('.layout').append(`<div id="myModal" class="modal">
-                
-                <div class="modal-content">
-                    <span class="modal__close">X</span>
-                    <div>
-                        <h3>You got pending previous session files temp</h3>
-                    </div>
-                    <ul class="modal-content__list">
-                        ${files.replace(regexes['REGEX_IP_REPLACE'],'')}
-                    </ul>
-                    <ul class="modal-content__buttons">
-                        <button id='deleteBufferFiles'>Delete previous session</button>
-                        <button id='doNotRemind'>Do not show again</button>
-                    </ul>
-                </div>
-            
-            </div>`);
+            createModal( 1 , array_files ); // modal for info
 
             const responseReminder = getReminder();
 
@@ -117,7 +96,7 @@ const checkBufferFiles = ()=>{
             
             });
 
-            $('#deleteBufferFiles').on('click',()=>{
+            $('#btn-modal__deleteBufferFiles').on('click',()=>{
 
                 deleteBufferFiles();
                 $('#myModal').html('').hide();
@@ -131,7 +110,7 @@ const checkBufferFiles = ()=>{
             })
 
             // Create a temp file reminder to as user refresh browser again, wether this one exists, it wont show modal again
-            $('#doNotRemind').on('click',()=>{
+            $('#btn-modal__doNotRemind').on('click',()=>{
 
                 let reminder = createIdUserSession() + '_reminder_.txt';
                 console.log( reminder );

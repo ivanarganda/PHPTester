@@ -1,12 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
-
-:root {
-    --main-color:#2e83d3;
-    --white-color:#ffffff;
-    --border:#9b9b9b;
-    --tough-green-color:#7fff00;
-    --rough-green-color:#98b978;
-}
+@import url("./root.css");
 
 html {
 

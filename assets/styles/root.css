@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+:root {
+    --back-color:#000000;
+    --main-color:#2e83d3;
+    --white-color:#ffffff;
+    --border:#9b9b9b;
+    --tough-green-color:#7fff00;
+    --rough-green-color:#98b978;
+
+    /* Button modal colors */
+
+    --edit-color:#4092c9;
+    --delete-color:tomato;
+    --save-color:#7fff00;
+    --info-color:#38e2da; 
+    --warn-color:#ff8800;
+
+    /* Button modal hover colors */
+    --edit-color-hover:#31739e;
+    --delete-color-hover:#973f2f;
+    --save-color-hover:#5eb30a;
+    --info-color-hover:#1cafa8; 
+    --warn-color-hover:#a85c05;
+
+}

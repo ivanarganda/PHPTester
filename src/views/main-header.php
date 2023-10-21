@@ -1,4 +1,6 @@
 <?php require_once "parameters.php"; ?>
+<?php require_once LOCAL_PATH . "/src/classes/autoload.php"; ?>
+<?php require_once LOCAL_PATH . "/ssl_checking.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

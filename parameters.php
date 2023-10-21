@@ -35,13 +35,19 @@ $host = $_SERVER['HTTP_HOST'];
 // Get the complete route (URL path)
 $route = $_SERVER['REQUEST_URI'];
 
+define( 'MAIN_PAGE' , 'dashboard.php' );
+
 // Combine everything to get the complete URL
 $completeUrl = $protocol . $host . $route;
 
-$completeUrl = str_replace("dashboard.php" , "" , $completeUrl);
+$completeUrl = str_replace( MAIN_PAGE , "" , $completeUrl);
+
+define( 'URI_NO_PROTOCOL' , str_replace( MAIN_PAGE , "" , $host . $route ) );
 
 // Output the complete URL
 define( 'URI' , $completeUrl);
+
+
 
 $slashes = count( explode( '/' , $route ) ) - 1;
 

@@ -8,6 +8,6 @@ $session = new Session;
 
 $session->getSessionId();
 
-echo "<script>window.location='dashboard.php';</script>";
+require_once "ssl_checking.php";
 
 ?>
